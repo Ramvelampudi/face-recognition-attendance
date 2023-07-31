@@ -27,10 +27,9 @@ known_face_names = ["Ram", "Ashish", "Jaya", "Surya", "Satyanarayana"]
 # List of expected students
 students = known_face_names.copy()
 
-
 # Get the current date and time
 now = datetime.now()
-current_date = now.strftime("%Y-%m-%d")
+current_date = now.strftime("%d-%m-%Y")
 
 # Write on csv (append mode)
 with open(f"{current_date}.csv", "a", newline="") as f:
@@ -70,7 +69,9 @@ with open(f"{current_date}.csv", "a", newline="") as f:
             fontColor = (255, 0, 0)
             thickness = 3
             lineType = 2
-            cv2.putText(frame, name + " Present", bottomLeftCornerofText, font, fontScale, fontColor, thickness, lineType)
+            current_time = now.strftime("%I:%M %p")  # Get the current time in 12-hour format with AM/PM
+            text = name + " Present " 
+            cv2.putText(frame, text, bottomLeftCornerofText, font, fontScale, fontColor, thickness, lineType)
 
         # Handle unknown faces by removing the last recognized name
         if "Unknown" in names_in_frame and len(names_in_frame) == 1:
@@ -79,7 +80,6 @@ with open(f"{current_date}.csv", "a", newline="") as f:
         for name in names_in_frame:
             if name in students:
                 students.remove(name)
-                current_time = now.strftime("%H-%M")
                 lnwriter.writerow([name, current_time])
 
         cv2.imshow("Attendance", frame)
